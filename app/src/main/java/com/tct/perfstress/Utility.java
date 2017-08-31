@@ -54,8 +54,8 @@ public class Utility {
         return activityName;
     }
 
-    public static List<ListItem> getAppInfo(PackageManager pm) {
-        List<ListItem> mListItems = new ArrayList<>();
+    public static ArrayList<ListItem> getAppInfo(PackageManager pm) {
+        ArrayList<ListItem> mListItems = new ArrayList<>();
 //        pm = context.getPackageManager();
         List<ApplicationInfo> listApplications = pm.getInstalledApplications(PackageManager.GET_UNINSTALLED_PACKAGES);
         Collections.sort(listApplications, new ApplicationInfo.DisplayNameComparator(pm));
@@ -73,7 +73,7 @@ public class Utility {
     }
 
     private static ListItem queryAppInfo(ApplicationInfo app, PackageManager pm) {
-        Log.d(MainActivity.TAG, "appName = " + app.loadLabel(pm));
+//        Log.d(MainActivity.TAG, "appName = " + app.loadLabel(pm));
         ListItem listItem = new ListItem();
         listItem.setAppIcon(app.loadIcon(pm));
         listItem.setAppName((String) app.loadLabel(pm));

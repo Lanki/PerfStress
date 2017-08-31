@@ -6,6 +6,7 @@ import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -19,7 +20,9 @@ import com.tct.perfstress.Utility;
 import com.tct.perfstress.mode.ListItem;
 import com.tct.perfstress.service.LauncherService;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.jar.Manifest;
 
 public class MainActivity extends AppCompatActivity {
     public static final String TAG = "MainActivity";
@@ -35,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         mContext = getBaseContext();
         if (!Utility.isUsageStatsEnabled(mContext)) {
-            startActivity(new Intent("android.setting.USAGE_ACCESS_SETTING"));
+            startActivity(new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS));
         }
         setContentView(R.layout.activity_main);
         PackageManager pm = this.getPackageManager();
@@ -69,24 +72,29 @@ public class MainActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         PerApplication.endTime = System.currentTimeMillis();
+        Log.d(MainActivity.TAG,"record the endTime");
     }
 
     private void initListItem(PackageManager pm) {
 
-        new AsyncTask<PackageManager, Void, List<ListItem>>() {
+        new AsyncTask<PackageManager, Void, ArrayList<ListItem>>() {
             @Override
-            protected List<ListItem> doInBackground(PackageManager... packageManagers) {
-                List<ListItem> listItems = Utility.getAppInfo(packageManagers[0]);
+            protected ArrayList<ListItem> doInBackground(PackageManager... packageManagers) {
+                ArrayList<ListItem> listItems = Utility.getAppInfo(packageManagers[0]);
                 for (int i = 0; i < listItems.size(); i++) {
+                    Log.d(MainActivity.TAG, "appName = " + listItems.get(i).getAppName());
                     if (listItems.get(i).getAppPkgName().equals("com.tct.perfstress")) {
+                        Log.d(MainActivity.TAG, "size = " + listItems.size());
                         listItems.remove(i);
+                        Log.d(MainActivity.TAG, "filter size = " + listItems.size());
+                        return listItems;
                     }
                 }
                 return listItems;
             }
 
             @Override
-            protected void onPostExecute(List<ListItem> listItems) {
+            protected void onPostExecute(ArrayList<ListItem> listItems) {
                 super.onPostExecute(listItems);
                 adapter.updateList(listItems);
                 adapter.notifyDataSetChanged();
