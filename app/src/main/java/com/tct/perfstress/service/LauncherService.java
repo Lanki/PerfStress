@@ -9,6 +9,7 @@ import android.util.Log;
 
 import com.tct.perfstress.PerApplication;
 import com.tct.perfstress.Utility;
+import com.tct.perfstress.ui.ResultActivity;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -88,18 +89,29 @@ public class LauncherService extends Service {
                 Log.d(LauncherService.TAG, "appSelected = " + PerApplication.appCount);
                 if (PerApplication.appCount != PerApplication.appSelected) {
                     Log.d(LauncherService.TAG, "called run()");
-                    for (; ; ) {
-                        String pkgName = PerApplication.app_pkgs.get(launchAppsNum.get(PerApplication.appCount));
-
-                        Intent intent = mContext.getPackageManager()
-                                .getLaunchIntentForPackage(pkgName);
-                        mContext.startActivity(intent);
-                        PerApplication.appCount++;
-                        Log.d(LauncherService.TAG, "开始启动第" + PerApplication.appCount + "个App, Name = ");
-                        PerApplication.startTime = System.currentTimeMillis();
+                    while (true) {
+                        try {
+                            String pkgName = PerApplication.app_pkgs.get(launchAppsNum.get(PerApplication.appCount));
+                            Intent intent = mContext.getPackageManager()
+                                    .getLaunchIntentForPackage(pkgName);
+                            mContext.startActivity(intent);
+                            PerApplication.appCount++;
+                            Log.d(LauncherService.TAG, "开始启动第" + PerApplication.appCount + "个App, Name = ");
+                            PerApplication.startTime = System.currentTimeMillis();
 //                        runShellCommand(mergeCommand(pkgName, Utility.getActivityName(pkgName, mContext)));
 //                        Log.d(Utility.TAG,"shell command = " + mergeCommand(pkgName,Utility.getActivityName(pkgName,mContext)));
-                        return;
+                            return;
+                        } catch (Exception e) {
+                            Log.e(LauncherService.TAG, "PS - StarterService----Unable to start " + PerApplication.app_pkgs.get(launchAppsNum.get(PerApplication.appCount)));
+                        } finally {
+                            if (!PerApplication.resultDeployed) {
+                                PerApplication.resultDeployed = true;
+                                Log.d(LauncherService.TAG,"PS - StarterService----Launching Results Activity.");
+                                Intent intent = new Intent(mContext, ResultActivity.class);
+                                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                startActivity(intent);
+                            }
+                        }
                     }
 
                 }
