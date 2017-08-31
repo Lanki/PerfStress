@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">PerfStress</string>
+    <string name="launch">启动</string>
+</resources>
