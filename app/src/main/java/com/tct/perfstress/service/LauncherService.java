@@ -105,13 +105,14 @@ public class LauncherService extends Service {
                         Log.e(LauncherService.TAG, "PS - StarterService----Unable to start " +
                                 PerApplication.app_pkgs.get(launchAppsNum.get(PerApplication.appCount)) + e);
                     }
-                }
-                if (!PerApplication.resultDeployed) {
-                    PerApplication.resultDeployed = true;
-                    Log.d(LauncherService.TAG, "PS - StarterService----Launching Results Activity.");
-                    Intent intent = new Intent(mContext, ResultActivity.class);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    startActivity(intent);
+                }else {
+                    if (!PerApplication.resultDeployed) {
+                        PerApplication.resultDeployed = true;
+                        Log.d(LauncherService.TAG, "PS - StarterService----Launching Results Activity.");
+                        Intent intent = new Intent(mContext, ResultActivity.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        startActivity(intent);
+                    }
                 }
 
             }
