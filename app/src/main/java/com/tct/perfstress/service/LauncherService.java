@@ -91,15 +91,15 @@ public class LauncherService extends Service {
                     Log.d(LauncherService.TAG, "called run()");
                     try {
                         String pkgName = PerApplication.app_pkgs.get(launchAppsNum.get(PerApplication.appCount));
-                        Intent intent = mContext.getPackageManager()
-                                .getLaunchIntentForPackage(pkgName);
-                        mContext.startActivity(intent);
+//                        Intent intent = mContext.getPackageManager()
+//                                .getLaunchIntentForPackage(pkgName);
+//                        mContext.startActivity(intent);
                         PerApplication.appCount++;
                         Log.d(LauncherService.TAG, "开始启动第" + PerApplication.appCount + "个App, Name = " + pkgName);
                         PerApplication.startTime = System.currentTimeMillis();
-//                        runShellCommand(mergeCommand(pkgName, Utility.getActivityName(pkgName, mContext)));
+                        runShellCommand(mergeCommand(pkgName, Utility.getActivityName(pkgName, mContext)));
 //                        Log.d(Utility.TAG,"shell command = " + mergeCommand(pkgName,Utility.getActivityName(pkgName,mContext)));
-                        Log.d(LauncherService.TAG, "启动时间" + (PerApplication.endTime - PerApplication.startTime));
+//                        Log.d(LauncherService.TAG, "启动时间" + (PerApplication.endTime - PerApplication.startTime));
                         return;
                     } catch (Exception e) {
                         Log.e(LauncherService.TAG, "PS - StarterService----Unable to start " +
@@ -122,6 +122,11 @@ public class LauncherService extends Service {
         launchAppsNum.clear();
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Log.d(LauncherService.TAG, "onDestroy");
+    }
 
     private void setLaunchAppNum() {
         for (Map.Entry e :
@@ -143,10 +148,10 @@ public class LauncherService extends Service {
         Process process = null;
         BufferedReader bufferedReader = null;
         StringBuilder mShellCommandSB = new StringBuilder();
-//        Log.d(LauncherService.TAG, "shell command" + command);
+        Log.d(LauncherService.TAG, "shell command" + command);
 
         mShellCommandSB.delete(0, mShellCommandSB.length());
-        String[] cmd = new String[]{"/system/bin/sh", "-c", command}; //调用bin文件
+        String[] cmd = new String[]{"/system/bin/sh", "am start com.tencent.qqlive/com.tencent.qqlive.ona.activity.WelcomeActivity"}; //调用bin文件//command
         try {
 //            byte b[] = new byte[1024];
             process = Runtime.getRuntime().exec(cmd);
@@ -178,6 +183,6 @@ public class LauncherService extends Service {
     }
 
     private String mergeCommand(String pkgName, String activityName) {
-        return "am start -W -n " + pkgName + "/" + activityName;
+        return "am start " + pkgName + "/" + activityName;
     }
 }
