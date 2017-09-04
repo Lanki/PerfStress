@@ -139,9 +139,6 @@ public class LauncherService extends Service {
         }
     }
 
-    private void test(String pkgName, Context mContext) {
-        String activityName = Utility.getActivityName(pkgName, mContext);
-    }
 
     private void runShellCommand(String command) {
         Process process = null;

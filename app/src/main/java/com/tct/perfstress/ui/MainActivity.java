@@ -6,6 +6,7 @@ import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -33,6 +34,8 @@ public class MainActivity extends AppCompatActivity {
     private ListviewAdapter adapter;
     private Button launch_btn;
 
+    private ArrayList<ListItem> listItems;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,6 +62,7 @@ public class MainActivity extends AppCompatActivity {
                     PerApplication.resultDeployed = false;
                     Intent intent = new Intent();
                     intent.setAction(LauncherService.LAUNCH_APP);
+                    intent.putParcelableArrayListExtra("listItems", listItems);
                     intent.setPackage("com.tct.perfstress");
                     MainActivity.this.startService(intent);
                     startActivity(PerApplication.loggerServiceIntent);
@@ -81,7 +85,7 @@ public class MainActivity extends AppCompatActivity {
         new AsyncTask<PackageManager, Void, ArrayList<ListItem>>() {
             @Override
             protected ArrayList<ListItem> doInBackground(PackageManager... packageManagers) {
-                ArrayList<ListItem> listItems = Utility.getAppInfo(packageManagers[0]);
+                listItems = Utility.getAppInfo(packageManagers[0]);
                 for (int i = 0; i < listItems.size(); i++) {
                     Log.d(MainActivity.TAG, "appName = " + listItems.get(i).getAppName());
                     if (listItems.get(i).getAppPkgName().equals("com.tct.perfstress")) {
