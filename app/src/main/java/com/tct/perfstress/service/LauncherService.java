@@ -91,21 +91,20 @@ public class LauncherService extends Service {
                     Log.d(LauncherService.TAG, "called run()");
                     try {
                         String pkgName = PerApplication.app_pkgs.get(launchAppsNum.get(PerApplication.appCount));
-//                        Intent intent = mContext.getPackageManager()
-//                                .getLaunchIntentForPackage(pkgName);
-//                        mContext.startActivity(intent);
+                        Intent intent = mContext.getPackageManager()
+                                .getLaunchIntentForPackage(pkgName);
+                        mContext.startActivity(intent);
                         PerApplication.appCount++;
-                        Log.d(LauncherService.TAG, "开始启动第" + PerApplication.appCount + "个App, Name = " + pkgName);
+                        Log.d(LauncherService.TAG, "开始启动第" + (PerApplication.appCount + 1) + "个App, Name = " + pkgName);
                         PerApplication.startTime = System.currentTimeMillis();
-                        runShellCommand(mergeCommand(pkgName, Utility.getActivityName(pkgName, mContext)));
+//                        runShellCommand(mergeCommand(pkgName, Utility.getActivityName(pkgName, mContext)));
 //                        Log.d(Utility.TAG,"shell command = " + mergeCommand(pkgName,Utility.getActivityName(pkgName,mContext)));
 //                        Log.d(LauncherService.TAG, "启动时间" + (PerApplication.endTime - PerApplication.startTime));
-                        return;
                     } catch (Exception e) {
                         Log.e(LauncherService.TAG, "PS - StarterService----Unable to start " +
                                 PerApplication.app_pkgs.get(launchAppsNum.get(PerApplication.appCount)) + e);
                     }
-                }else {
+                } else {
                     if (!PerApplication.resultDeployed) {
                         PerApplication.resultDeployed = true;
                         Log.d(LauncherService.TAG, "PS - StarterService----Launching Results Activity.");

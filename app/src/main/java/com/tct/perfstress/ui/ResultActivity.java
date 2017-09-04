@@ -11,10 +11,9 @@ public class ResultActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        stopService(PerApplication.loggerServiceIntent);
         PerApplication.timerLaunch.cancel();
         stopService(PerApplication.launchServiceIntent);
-
-
         setContentView(R.layout.activity_result);
     }
 }

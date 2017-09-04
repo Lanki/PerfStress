@@ -61,6 +61,7 @@ public class MainActivity extends AppCompatActivity {
                     intent.setAction(LauncherService.LAUNCH_APP);
                     intent.setPackage("com.tct.perfstress");
                     MainActivity.this.startService(intent);
+                    startActivity(PerApplication.loggerServiceIntent);
                 }
             }
         });
@@ -71,8 +72,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        PerApplication.endTime = System.currentTimeMillis();
-        Log.d(MainActivity.TAG,"record the endTime");
+//        PerApplication.endTime = System.currentTimeMillis();
+//        Log.d(MainActivity.TAG,"record the endTime");
     }
 
     private void initListItem(PackageManager pm) {

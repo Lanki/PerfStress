@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 
 import com.tct.perfstress.service.LauncherService;
+import com.tct.perfstress.service.LoggerService;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -23,6 +24,7 @@ public class PerApplication extends Application {
     public static Timer timerLaunch;
     public static Timer timerLogger;
     public static Intent launchServiceIntent;
+    public static Intent loggerServiceIntent;
     public static Long startTime;
     public static Long endTime;
     public static Boolean startLock;
@@ -41,6 +43,7 @@ public class PerApplication extends Application {
         startLock = false;
         resultDeployed = false;
         launchServiceIntent = new Intent(this, LauncherService.class);
+        loggerServiceIntent = new Intent(this, LoggerService.class);
 
     }
 }
