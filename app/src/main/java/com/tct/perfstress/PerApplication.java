@@ -4,11 +4,13 @@ import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 
+import com.tct.perfstress.mode.ListItem;
 import com.tct.perfstress.service.LauncherService;
 import com.tct.perfstress.service.LoggerService;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Timer;
 
 /**
@@ -29,19 +31,25 @@ public class PerApplication extends Application {
     public static Long endTime;
     public static Boolean startLock;
     public static Boolean resultDeployed;
+    public static int latency;
+    public static List<Integer> launchAppsNum;
+    public static ArrayList<ListItem> listItem;
 
     @Override
     public void onCreate() {
         mContext = this;
         super.onCreate();
         isSelected = new HashMap<>();
+        launchAppsNum = new ArrayList<>();
         app_pkgs = Utility.queryPkgName(mContext);
         appCount = 0;
         appSelected = 0;
+        latency = 0;
         startTime = 0L;
         endTime = 0L;
         startLock = false;
         resultDeployed = false;
+        listItem = new ArrayList<>();
         launchServiceIntent = new Intent(this, LauncherService.class);
         loggerServiceIntent = new Intent(this, LoggerService.class);
 

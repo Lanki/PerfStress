@@ -11,6 +11,7 @@ public class ResultActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        PerApplication.startLock = false;
         stopService(PerApplication.loggerServiceIntent);
         PerApplication.timerLaunch.cancel();
         stopService(PerApplication.launchServiceIntent);

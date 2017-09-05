@@ -27,10 +27,14 @@
                 <action android:name="com.lqchen.perfapp.launchapp" />
             </intent-filter>
         </service>
-        <service android:name=".service.LoggerService" />
+        <service android:name=".service.LoggerService">
+            <intent-filter>
+                <action android:name="com.lqchen.perfapp.startlog" />
+            </intent-filter>
+            </service>
 
         <activity android:name=".ui.ResultActivity" />
-        <activity android:name=".ui.TestActivity"></activity>
+        <activity android:name=".ui.TestActivity"/>
     </application>
 
 </manifest>

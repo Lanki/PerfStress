@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.tct.perfstress.Adapter.ListviewAdapter;
 import com.tct.perfstress.PerApplication;
@@ -20,6 +21,7 @@ import com.tct.perfstress.R;
 import com.tct.perfstress.Utility;
 import com.tct.perfstress.mode.ListItem;
 import com.tct.perfstress.service.LauncherService;
+import com.tct.perfstress.service.LoggerService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -60,12 +62,15 @@ public class MainActivity extends AppCompatActivity {
                 if (!PerApplication.startLock) {
                     PerApplication.startLock = true;
                     PerApplication.resultDeployed = false;
-                    Intent intent = new Intent();
-                    intent.setAction(LauncherService.LAUNCH_APP);
-                    intent.putParcelableArrayListExtra("listItems", listItems);
-                    intent.setPackage("com.tct.perfstress");
-                    MainActivity.this.startService(intent);
-                    startActivity(PerApplication.loggerServiceIntent);
+                    Intent launchIntent = new Intent();
+                    launchIntent.setAction(LauncherService.LAUNCH_APP);
+                    launchIntent.setPackage("com.tct.perfstress");
+                    startService(launchIntent);
+                    Intent loggerIntent = new Intent();
+                    loggerIntent.setAction(LoggerService.STARTLOG);
+                    loggerIntent.setPackage("com.tct.perfstress");
+                    startService(loggerIntent);
+                    Toast.makeText(MainActivity.this,"开始启动选中的App",Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -76,8 +81,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-//        PerApplication.endTime = System.currentTimeMillis();
-//        Log.d(MainActivity.TAG,"record the endTime");
     }
 
     private void initListItem(PackageManager pm) {
@@ -86,6 +89,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             protected ArrayList<ListItem> doInBackground(PackageManager... packageManagers) {
                 listItems = Utility.getAppInfo(packageManagers[0]);
+                PerApplication.listItem = listItems;
                 for (int i = 0; i < listItems.size(); i++) {
                     Log.d(MainActivity.TAG, "appName = " + listItems.get(i).getAppName());
                     if (listItems.get(i).getAppPkgName().equals("com.tct.perfstress")) {

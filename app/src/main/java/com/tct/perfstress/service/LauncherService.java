@@ -8,14 +8,13 @@ import android.support.annotation.Nullable;
 import android.util.Log;
 
 import com.tct.perfstress.PerApplication;
-import com.tct.perfstress.Utility;
+import com.tct.perfstress.mode.ListItem;
 import com.tct.perfstress.ui.ResultActivity;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -29,9 +28,6 @@ public class LauncherService extends Service {
     public static final String LAUNCH_APP = "com.lqchen.perfapp.launchapp";
 
     private Context mContext;
-    private List<Integer> launchAppsNum;
-    private String command;
-//    private Long appLaunchTime;
 
 
     @Nullable
@@ -43,16 +39,12 @@ public class LauncherService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-        Log.d(TAG, "Service onCreate()");
         mContext = this;
-//        appLaunchTime = 0L;
-        launchAppsNum = new ArrayList<>();
         PerApplication.timerLaunch = new Timer();
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        Log.d(TAG, "Service onStartCommand()");
         String action = null;
         try {
             action = intent.getAction();
@@ -83,29 +75,33 @@ public class LauncherService extends Service {
         PerApplication.timerLaunch.scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
-                if (launchAppsNum.size() == 0) {
+                if (PerApplication.launchAppsNum.size() == 0) {
                     setLaunchAppNum();
                 }
-                Log.d(LauncherService.TAG, "appSelected = " + PerApplication.appCount);
-                if (PerApplication.appCount != PerApplication.appSelected) {
+                Log.d(LauncherService.TAG, "appCount = " + PerApplication.appCount);
+                if (PerApplication.appCount < PerApplication.appSelected) {
                     Log.d(LauncherService.TAG, "called run()");
                     try {
-                        String pkgName = PerApplication.app_pkgs.get(launchAppsNum.get(PerApplication.appCount));
+                        PerApplication.startTime = System.currentTimeMillis();
+                        String pkgName = PerApplication.listItem.get(PerApplication.launchAppsNum.get(PerApplication.appCount)).getAppPkgName();
                         Intent intent = mContext.getPackageManager()
                                 .getLaunchIntentForPackage(pkgName);
                         mContext.startActivity(intent);
+                        Log.d(LauncherService.TAG, "开始启动第" + (PerApplication.appCount + 1) + "个App, Name = "
+                                + PerApplication.listItem.get(PerApplication.launchAppsNum.get(PerApplication.appCount)).getAppName());
                         PerApplication.appCount++;
-                        Log.d(LauncherService.TAG, "开始启动第" + (PerApplication.appCount + 1) + "个App, Name = " + pkgName);
-                        PerApplication.startTime = System.currentTimeMillis();
 //                        runShellCommand(mergeCommand(pkgName, Utility.getActivityName(pkgName, mContext)));
 //                        Log.d(Utility.TAG,"shell command = " + mergeCommand(pkgName,Utility.getActivityName(pkgName,mContext)));
 //                        Log.d(LauncherService.TAG, "启动时间" + (PerApplication.endTime - PerApplication.startTime));
                     } catch (Exception e) {
+                        e.printStackTrace();
                         Log.e(LauncherService.TAG, "PS - StarterService----Unable to start " +
-                                PerApplication.app_pkgs.get(launchAppsNum.get(PerApplication.appCount)) + e);
+                                e);
                     }
                 } else {
                     if (!PerApplication.resultDeployed) {
+                        PerApplication.appCount = 0;
+                        PerApplication.launchAppsNum.clear();
                         PerApplication.resultDeployed = true;
                         Log.d(LauncherService.TAG, "PS - StarterService----Launching Results Activity.");
                         Intent intent = new Intent(mContext, ResultActivity.class);
@@ -117,8 +113,6 @@ public class LauncherService extends Service {
             }
         }, 4000L, 10000L);
 //        Toast.makeText(mContext, "appLaunchTime = " + appLaunchTime, Toast.LENGTH_SHORT).show();
-        PerApplication.appCount = 0;
-        launchAppsNum.clear();
     }
 
     @Override
@@ -133,7 +127,7 @@ public class LauncherService extends Service {
             Object key = e.getKey();
             Object val = e.getValue();
             if (val.equals(true)) {
-                launchAppsNum.add(Integer.valueOf(key.toString()));
+                PerApplication.launchAppsNum.add(Integer.valueOf(key.toString()));
 //                Log.d(LauncherService.TAG, "key = " + key);
             }
         }

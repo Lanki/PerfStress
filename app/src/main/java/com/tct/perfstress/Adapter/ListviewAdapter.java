@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.tct.perfstress.PerApplication;
 import com.tct.perfstress.R;
 import com.tct.perfstress.mode.ListItem;
+import com.tct.perfstress.ui.MainActivity;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -23,9 +24,9 @@ import java.util.List;
 
 public class ListviewAdapter extends BaseAdapter {
     private List<ListItem> mListItems = new ArrayList<>();
-    private boolean firstLaunch = true;
     private LayoutInflater inflater;
     private HashMap<Integer, Boolean> isSelected;
+    private boolean firstLaunch = true;
 
 
     public ListviewAdapter(Context context, HashMap<Integer, Boolean> isSelected) {
