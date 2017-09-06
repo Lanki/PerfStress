@@ -68,8 +68,8 @@ public class ListviewAdapter extends BaseAdapter {
 
     @Override
     public View getView(final int i, View convertView, ViewGroup viewGroup) {
-        ViewHolder mViewHolder = null;
-        View mView = null;
+        ViewHolder mViewHolder;
+        View mView;
 
         if (convertView == null || convertView.getTag() == null) {
             mView = inflater.inflate(R.layout.list_common_item, null);

@@ -52,10 +52,12 @@ public class LoggerService extends Service {
     public void onTrimMemory(int level) {
         super.onTrimMemory(level);
         Log.d(LoggerService.TAG, "call onTrimMemory");
-        if (level == ComponentCallbacks2.TRIM_MEMORY_UI_HIDDEN) {
+        if (level == ComponentCallbacks2.TRIM_MEMORY_UI_HIDDEN && PerApplication.firstLaunch) {
             Log.d(LoggerService.TAG, "level = 20");
+            PerApplication.firstLaunch = false;
             PerApplication.endTime = System.currentTimeMillis();
             PerApplication.latency = (int) (PerApplication.endTime - PerApplication.startTime);
+            PerApplication.latencies.add(PerApplication.latency);
             String appName = PerApplication.listItem
                     .get(PerApplication.launchAppsNum.get(PerApplication.appCount - 1)).getAppName();
             try {

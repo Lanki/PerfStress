@@ -34,6 +34,9 @@ public class PerApplication extends Application {
     public static int latency;
     public static List<Integer> launchAppsNum;
     public static ArrayList<ListItem> listItem;
+    public static ArrayList<ListItem> chosenList;
+    public static ArrayList<Integer> latencies;
+    public static boolean firstLaunch;
 
     @Override
     public void onCreate() {
@@ -41,12 +44,15 @@ public class PerApplication extends Application {
         super.onCreate();
         isSelected = new HashMap<>();
         launchAppsNum = new ArrayList<>();
+        chosenList = new ArrayList<>();
+        latencies = new ArrayList<>();
         app_pkgs = Utility.queryPkgName(mContext);
         appCount = 0;
         appSelected = 0;
         latency = 0;
         startTime = 0L;
         endTime = 0L;
+        firstLaunch = false;
         startLock = false;
         resultDeployed = false;
         listItem = new ArrayList<>();

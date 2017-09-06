@@ -75,13 +75,15 @@ public class LauncherService extends Service {
         PerApplication.timerLaunch.scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
-                if (PerApplication.launchAppsNum.size() == 0) {
+                if (PerApplication.launchAppsNum.size() == 0 || PerApplication.chosenList.size() == 0) {
                     setLaunchAppNum();
+                    setChosenList();
                 }
                 Log.d(LauncherService.TAG, "appCount = " + PerApplication.appCount);
                 if (PerApplication.appCount < PerApplication.appSelected) {
                     Log.d(LauncherService.TAG, "called run()");
                     try {
+                        PerApplication.firstLaunch = true;
                         PerApplication.startTime = System.currentTimeMillis();
                         String pkgName = PerApplication.listItem.get(PerApplication.launchAppsNum.get(PerApplication.appCount)).getAppPkgName();
                         Intent intent = mContext.getPackageManager()
@@ -89,9 +91,6 @@ public class LauncherService extends Service {
                         mContext.startActivity(intent);
                         Log.d(LauncherService.TAG, "开始启动第" + (PerApplication.appCount + 1) + "个App, Name = "
                                 + PerApplication.listItem.get(PerApplication.launchAppsNum.get(PerApplication.appCount)).getAppName());
-//                        runShellCommand(mergeCommand(pkgName, Utility.getActivityName(pkgName, mContext)));
-//                        Log.d(Utility.TAG,"shell command = " + mergeCommand(pkgName,Utility.getActivityName(pkgName,mContext)));
-//                        Log.d(LauncherService.TAG, "启动时间" + (PerApplication.endTime - PerApplication.startTime));
                     } catch (Exception e) {
                         e.printStackTrace();
                         Log.e(LauncherService.TAG, "PS - StarterService----Unable to start " +
@@ -108,7 +107,6 @@ public class LauncherService extends Service {
                 PerApplication.appCount++;
             }
         }, 5000L, 20000L);
-//        Toast.makeText(mContext, "appLaunchTime = " + appLaunchTime, Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -124,8 +122,13 @@ public class LauncherService extends Service {
             Object val = e.getValue();
             if (val.equals(true)) {
                 PerApplication.launchAppsNum.add(Integer.valueOf(key.toString()));
-//                Log.d(LauncherService.TAG, "key = " + key);
             }
+        }
+    }
+
+    private void setChosenList(){
+        for (int i : PerApplication.launchAppsNum) {
+            PerApplication.chosenList.add(PerApplication.listItem.get(i));
         }
     }
 
