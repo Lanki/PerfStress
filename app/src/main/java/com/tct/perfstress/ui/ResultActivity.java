@@ -16,5 +16,15 @@ public class ResultActivity extends AppCompatActivity {
         PerApplication.timerLaunch.cancel();
         stopService(PerApplication.launchServiceIntent);
         setContentView(R.layout.activity_result);
+
+
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        PerApplication.appCount = 0;
+        PerApplication.launchAppsNum.clear();
+        finish();
     }
 }

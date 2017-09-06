@@ -89,7 +89,6 @@ public class LauncherService extends Service {
                         mContext.startActivity(intent);
                         Log.d(LauncherService.TAG, "开始启动第" + (PerApplication.appCount + 1) + "个App, Name = "
                                 + PerApplication.listItem.get(PerApplication.launchAppsNum.get(PerApplication.appCount)).getAppName());
-                        PerApplication.appCount++;
 //                        runShellCommand(mergeCommand(pkgName, Utility.getActivityName(pkgName, mContext)));
 //                        Log.d(Utility.TAG,"shell command = " + mergeCommand(pkgName,Utility.getActivityName(pkgName,mContext)));
 //                        Log.d(LauncherService.TAG, "启动时间" + (PerApplication.endTime - PerApplication.startTime));
@@ -98,20 +97,17 @@ public class LauncherService extends Service {
                         Log.e(LauncherService.TAG, "PS - StarterService----Unable to start " +
                                 e);
                     }
-                } else {
-                    if (!PerApplication.resultDeployed) {
-                        PerApplication.appCount = 0;
-                        PerApplication.launchAppsNum.clear();
-                        PerApplication.resultDeployed = true;
-                        Log.d(LauncherService.TAG, "PS - StarterService----Launching Results Activity.");
-                        Intent intent = new Intent(mContext, ResultActivity.class);
-                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        startActivity(intent);
-                    }
-                }
+                } else if (!PerApplication.resultDeployed) {
+                    PerApplication.resultDeployed = true;
+                    Log.d(LauncherService.TAG, "PS - StarterService----Launching Result Activity.");
+                    Intent intent = new Intent(mContext, ResultActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent);
 
+                }
+                PerApplication.appCount++;
             }
-        }, 4000L, 10000L);
+        }, 5000L, 20000L);
 //        Toast.makeText(mContext, "appLaunchTime = " + appLaunchTime, Toast.LENGTH_SHORT).show();
     }
 

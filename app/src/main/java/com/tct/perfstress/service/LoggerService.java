@@ -51,29 +51,45 @@ public class LoggerService extends Service {
     @Override
     public void onTrimMemory(int level) {
         super.onTrimMemory(level);
-        String localLevel;
+        Log.d(LoggerService.TAG, "call onTrimMemory");
         if (level == ComponentCallbacks2.TRIM_MEMORY_UI_HIDDEN) {
+            Log.d(LoggerService.TAG, "level = 20");
             PerApplication.endTime = System.currentTimeMillis();
             PerApplication.latency = (int) (PerApplication.endTime - PerApplication.startTime);
-            Toast.makeText(this, "第" + PerApplication.appCount + "个APP is launch, Latency: " +
-                    PerApplication.latency, Toast.LENGTH_SHORT).show();
-        }
-
-        try {
-            Thread.sleep(500L);
+            String appName = PerApplication.listItem
+                    .get(PerApplication.launchAppsNum.get(PerApplication.appCount - 1)).getAppName();
+            try {
+                Thread.sleep(2000);
+            } catch (InterruptedException e) {
+                Log.e(LoggerService.TAG, " I can't sleep!!!");
+                e.printStackTrace();
+            }
+            Toast.makeText(this, appName + " is launch, Latency: " +
+                    PerApplication.latency + " ms", Toast.LENGTH_SHORT).show();
             Intent intent = new Intent(LoggerService.this, TestActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
+        }
 
-            if ((level >= ComponentCallbacks2.TRIM_MEMORY_RUNNING_MODERATE)
-                    && (level != ComponentCallbacks2.TRIM_MEMORY_UI_HIDDEN)) {
-                localLevel = "Unknown TRIM_MEMORY Code";
-                if (level == ComponentCallbacks2.TRIM_MEMORY_RUNNING_MODERATE) {
-                    localLevel = "TRIM_MEMORY_RUNNING_MODERATE";
+
+        if ((level >= TRIM_MEMORY_RUNNING_MODERATE)
+                && (level != TRIM_MEMORY_UI_HIDDEN)) {
+            String trim = "Unknown TRIM_MEMORY Code";
+            try {
+                if (level == TRIM_MEMORY_RUNNING_MODERATE) {
+                    trim = "TRIM_MEMORY_RUNNING_MODERATE";
+                    // TODO: 17-9-6
                 }
+                if (level == TRIM_MEMORY_RUNNING_LOW) {
+                    trim = "TRIM_MEMORY_RUNNING_LOW";
+                }
+                if (level == TRIM_MEMORY_RUNNING_CRITICAL) {
+                    trim = "TRIM_MEMORY_RUNNING_CRITICAL";
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-        } catch (Exception e) {
-            e.printStackTrace();
         }
     }
 }
