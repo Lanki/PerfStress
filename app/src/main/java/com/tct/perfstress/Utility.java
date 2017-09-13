@@ -11,8 +11,11 @@ import android.content.pm.ResolveInfo;
 import android.util.Log;
 
 import com.tct.perfstress.mode.ListItem;
+import com.tct.perfstress.ui.InstallActivity;
 import com.tct.perfstress.ui.MainActivity;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -144,4 +147,24 @@ public class Utility {
         }
         return false;
     }
+
+    /**
+     * 获取apk名称
+     * @param path apk存放路径
+     * @return fileNames
+     */
+    public static ArrayList<String> getFileName(String path) throws FileNotFoundException {
+        File file = new File(path + File.separator);
+        ArrayList<String> fileNames = new ArrayList<>();
+        if (!file.exists()) {
+            throw new FileNotFoundException("haven't found any files in this path!");
+        }
+        File[] files = file.listFiles();
+        Log.d(InstallActivity.TAG, "getFileName-- files count = " + (files == null ? 0 : files.length));
+        for (File file1 : files) {
+            fileNames.add(file1.getName());
+        }
+        return fileNames;
+    }
+
 }

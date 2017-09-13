@@ -70,10 +70,10 @@ public class ResultListAdapter extends BaseAdapter {
         TextView launchTime;
 
         ViewHolder(View view) {
-            imageView = view.findViewById(R.id.appIcon);
-            title = view.findViewById(R.id.title);
-            sub_title = view.findViewById(R.id.sub_title);
-            launchTime = view.findViewById(R.id.launchTime);
+            imageView = (ImageView) view.findViewById(R.id.appIcon);
+            title = (TextView) view.findViewById(R.id.title);
+            sub_title = (TextView) view.findViewById(R.id.sub_title);
+            launchTime = (TextView) view.findViewById(R.id.launchTime);
         }
     }
 

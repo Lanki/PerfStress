@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">PerfStress</string>
     <string name="launch">启动</string>
+    <string name="install">安装下载</string>
 </resources>

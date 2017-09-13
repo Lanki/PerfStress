@@ -126,10 +126,10 @@ public class ListviewAdapter extends BaseAdapter {
         CheckBox checkBox;
 
         private ViewHolder(View view) {
-            this.appIcon = view.findViewById(R.id.appIcon);
-            this.tv_appName = view.findViewById(R.id.tv_appName);
-            this.tv_appPkg = view.findViewById(R.id.tv_appPkg);
-            this.checkBox = view.findViewById(R.id.checkBox);
+            this.appIcon = (ImageView) view.findViewById(R.id.appIcon);
+            this.tv_appName = (TextView) view.findViewById(R.id.tv_appName);
+            this.tv_appPkg = (TextView) view.findViewById(R.id.tv_appPkg);
+            this.checkBox = (CheckBox) view.findViewById(R.id.checkBox);
         }
     }
 }

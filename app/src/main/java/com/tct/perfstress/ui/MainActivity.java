@@ -35,6 +35,7 @@ public class MainActivity extends AppCompatActivity {
     private Context mContext;
     private ListviewAdapter adapter;
     private Button launch_btn;
+    private Button install_btn;
 
     private ArrayList<ListItem> listItems;
 
@@ -55,6 +56,14 @@ public class MainActivity extends AppCompatActivity {
         listView.setAdapter(adapter);
         listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
 
+        install_btn = (Button) findViewById(R.id.btn_install);
+        install_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, InstallActivity.class);
+                startActivity(intent);
+            }
+        });
         launch_btn = (Button) findViewById(R.id.btn_launch);
         launch_btn.setOnClickListener(new View.OnClickListener() {
             @Override

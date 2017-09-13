@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.tct.perfstress">
 
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.PACKAGE_USAGE_STATS" />
 
     <application
@@ -31,10 +33,11 @@
             <intent-filter>
                 <action android:name="com.lqchen.perfapp.startlog" />
             </intent-filter>
-            </service>
+        </service>
 
         <activity android:name=".ui.ResultActivity" />
-        <activity android:name=".ui.TestActivity"/>
+        <activity android:name=".ui.TestActivity" />
+        <activity android:name=".ui.InstallActivity"></activity>
     </application>
 
 </manifest>
